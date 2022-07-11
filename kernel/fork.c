@@ -95,6 +95,7 @@
 #include <linux/stackleak.h>
 #include <linux/kasan.h>
 #include <linux/scs.h>
+#include <linux/simple_lmk.h>
 #include <linux/io_uring.h>
 #include <linux/cpufreq_times.h>
 #include <linux/task_integrity.h>
@@ -1150,6 +1151,7 @@ static inline void __mmput(struct mm_struct *mm)
 	}
 	if (mm->binfmt)
 		module_put(mm->binfmt->module);
+    simple_lmk_mm_freed(mm);
 	mmdrop(mm);
 }
 
