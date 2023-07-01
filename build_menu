@@ -1,5 +1,5 @@
 #!/bin/bash
-# AFANEH-KERNEL-BUILD menu
+# bklyn-KERNEL-BUILD menu
 
 # Variables
 menu_version="v2.3"
@@ -18,7 +18,7 @@ export PATH=$PARENT_DIR/gas/linux-x86:$PATH
 export TARGET_SOC=waipio
 export LLVM=1 LLVM_IAS=1
 export ARCH=arm64
-KERNEL_MAKE_ENV="LOCALVERSION=-afaneh92"
+KERNEL_MAKE_ENV="LOCALVERSION=-bklyn92"
 
 # Color
 ON_BLUE=`echo -e "\033[44m"`	# On Blue
@@ -59,7 +59,7 @@ build_tools(){
 
 variant(){
   findconfig=""
-  findconfig=($(ls arch/arm64/configs/afaneh_* 2>/dev/null))
+  findconfig=($(ls arch/arm64/configs/bklyn_* 2>/dev/null))
   declare -i i=1
   shift 2
   echo ""
@@ -94,8 +94,10 @@ clean(){
 build_kernel(){
   variant
   echo "${BGREEN}***** Compiling kernel *****${STD}"
+curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
+sleep 5
   [ ! -d "$OUT_DIR" ] && mkdir $OUT_DIR
-  make -j$(nproc) -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV afaneh_${VARIANT}_defconfig
+  make -j$(nproc) -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV bklyn_${VARIANT}_defconfig
   make -j$(nproc) -C $(pwd) O=$(pwd)/out $KERNEL_MAKE_ENV
 
   [ -e $OUT_DIR/arch/arm64/boot/Image.gz ] && cp $OUT_DIR/arch/arm64/boot/Image.gz $OUT_DIR/Image.gz
@@ -119,7 +121,7 @@ anykernel3(){
     cd $PARENT_DIR/AnyKernel3
     git reset --hard
     cp $OUT_DIR/arch/arm64/boot/Image zImage
-    sed -i "s/ExampleKernel by osm0sis/${VARIANT} kernel by afaneh92/g" anykernel.sh
+    sed -i "s/ExampleKernel by osm0sis/${VARIANT} kernel by bklyn92/g" anykernel.sh
     sed -i "s/do\.devicecheck=1/do\.devicecheck=0/g" anykernel.sh
     sed -i "s/=maguro/=/g" anykernel.sh
     sed -i "s/=toroplus/=/g" anykernel.sh
@@ -149,7 +151,7 @@ build_tools
 # Show menu
 show_menus(){
   clear
-  echo "${ON_BLUE}AFANEH-KERNEL-BUILD menu $menu_version${STD}"
+  echo "${ON_BLUE}bklyn-KERNEL-BUILD menu $menu_version${STD}"
   echo " 1. ${UNDER_LINE}B${STD}uild kernel"
   echo " 2. ${UNDER_LINE}C${STD}lean"
   echo " 3. Make ${UNDER_LINE}f${STD}lashable zip"
